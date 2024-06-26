@@ -1,4 +1,4 @@
-import { ArrowDown, ChevronDown } from 'lucide-react'
+import { ArrowDownIcon, ChevronDownIcon } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -24,7 +24,7 @@ export default function UserAuthenticationDrawer() {
 				</Avatar>
 				<DrawerTrigger asChild>
 					<Button variant="ghost" size="icon" className="shrink-0 rounded-full">
-						<ChevronDown className="size-4 shrink-0" />
+						<ChevronDownIcon className="size-4 shrink-0" />
 					</Button>
 				</DrawerTrigger>
 			</div>
@@ -35,6 +35,7 @@ export default function UserAuthenticationDrawer() {
 						Masukkan nomor telepon dan PIN untuk keamanan akun Anda.
 					</DrawerDescription>
 				</DrawerHeader>
+
 				<section className="flex flex-1 flex-col gap-4 p-4">
 					<UserCredentialForm />
 					<Separator />
@@ -45,7 +46,7 @@ export default function UserAuthenticationDrawer() {
 								size="icon"
 								className="shrink-0 rounded-full"
 							>
-								<ArrowDown className="size-4 shrink-0" />
+								<ArrowDownIcon className="size-4 shrink-0" />
 							</Button>
 						</DrawerClose>
 					</div>

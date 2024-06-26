@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input'
 import useDevices from '@/hooks/use-devices'
 import { NATIONALITY_ID_LENGTH } from '@/lib/constants'
 import { mergeRefs } from '@/lib/utils'
+import { useCustomerActions, useCustomerNationalityIds } from '@/store/customer'
 
 const FormSchema = z.object({
 	nationalityId: z.string().length(NATIONALITY_ID_LENGTH),
@@ -27,6 +28,8 @@ const FormSchema = z.object({
 type FormSchemaType = z.infer<typeof FormSchema>
 
 export default function AddCustomerForm() {
+	const customerNationalityIds = useCustomerNationalityIds()
+	const customerActions = useCustomerActions()
 	const { isSmallDevice } = useDevices()
 	const autoFocusRef = useRef<React.ComponentRef<typeof Input>>(null)
 
@@ -38,6 +41,19 @@ export default function AddCustomerForm() {
 	})
 
 	const onSubmit = ({ nationalityId }: FormSchemaType) => {
+		if (
+			customerNationalityIds.find(
+				(customerNationalityId) => customerNationalityId === nationalityId,
+			)
+		) {
+			toast.error('NIK sudah terdaftar. Mohon masukkan NIK yang berbeda.')
+		} else {
+			customerActions.addNationalityId(nationalityId)
+			toast.success('NIK baru berhasil ditambahkan.')
+
+			form.reset()
+		}
+
 		if (autoFocusRef.current && !isSmallDevice) {
 			autoFocusRef.current.focus()
 		}

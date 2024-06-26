@@ -19,6 +19,11 @@ export type UserAuth = {
 	settings: AuthSettings
 }
 
+export type Customer = {
+	id: string
+	nationalityId: string
+}
+
 export type ErrorResponse = {
 	code: number
 	message: string

@@ -23,3 +23,7 @@ export type ErrorResponse = {
 	code: number
 	message: string
 }
+
+export type MutableRefList<T> = Array<
+	React.RefCallback<T> | React.MutableRefObject<T> | undefined | null
+>

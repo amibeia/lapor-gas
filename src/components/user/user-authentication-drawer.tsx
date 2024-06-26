@@ -26,7 +26,7 @@ export default function UserAuthenticationDrawer() {
 
 	return (
 		<Drawer open={open} onOpenChange={setOpen}>
-			<div className="bg-secondary text-secondary-foreground flex size-fit items-center justify-center gap-2 rounded-full p-1 shadow-sm">
+			<div className="flex size-fit items-center justify-center gap-2 rounded-full bg-secondary p-1 text-secondary-foreground shadow-sm">
 				<Avatar className="shrink-0">
 					<AvatarImage src={userAuth ? 'assets/default-avatar.svg' : ''} />
 					<AvatarFallback>
@@ -41,7 +41,7 @@ export default function UserAuthenticationDrawer() {
 			</div>
 			<DrawerContent className="mx-auto max-w-xl">
 				<DrawerHeader>
-					<DrawerTitle className="font-sans">Autentikasi Akun</DrawerTitle>
+					<DrawerTitle>Autentikasi Akun</DrawerTitle>
 					<DrawerDescription>
 						Masukkan nomor telepon dan PIN untuk keamanan akun Anda.
 					</DrawerDescription>

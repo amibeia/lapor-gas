@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--background: 127 100% 100%;
+		--foreground: 127 5% 10%;
+		--card: 127 50% 100%;
+		--card-foreground: 127 5% 15%;
+		--popover: 127 100% 100%;
+		--popover-foreground: 127 100% 10%;
+		--primary: 127 100% 33.3%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 127 30% 90%;
+		--secondary-foreground: 0 0% 0%;
+		--muted: 89 30% 95%;
+		--muted-foreground: 127 5% 40%;
+		--accent: 89 30% 90%;
+		--accent-foreground: 127 5% 15%;
+		--destructive: 0 100% 50%;
+		--destructive-foreground: 127 5% 100%;
+		--border: 127 30% 82%;
+		--input: 127 30% 50%;
+		--ring: 127 100% 33.3%;
+		--radius: 1rem;
+	}
+	.dark {
+		--background: 127 50% 10%;
+		--foreground: 127 5% 100%;
+		--card: 127 50% 10%;
+		--card-foreground: 127 5% 100%;
+		--popover: 127 50% 5%;
+		--popover-foreground: 127 5% 100%;
+		--primary: 127 100% 33.3%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 127 30% 20%;
+		--secondary-foreground: 0 0% 100%;
+		--muted: 89 30% 25%;
+		--muted-foreground: 127 5% 65%;
+		--accent: 89 30% 25%;
+		--accent-foreground: 127 5% 95%;
+		--destructive: 0 100% 50%;
+		--destructive-foreground: 127 5% 100%;
+		--border: 127 30% 50%;
+		--input: 127 30% 50%;
+		--ring: 127 100% 33.3%;
+		--radius: 1rem;
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+* {
+	margin: 0;
+}
+
+body {
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	overflow-wrap: break-word;
+}
+
+#root,
+#__next {
+	isolation: isolate;
+}

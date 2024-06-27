@@ -141,9 +141,9 @@ export default function UserCredentialForm() {
 										size="icon"
 										disabled={isEditMode}
 										onClick={() => setIsShowPin((prevState) => !prevState)}
-										className="absolute inset-y-2 right-2 size-6 shrink-0"
+										className="absolute inset-y-2 right-2 size-6 shrink-0 rounded-full"
 									>
-										<ShowPinIcon className="text-muted-foreground size-4 shrink-0" />
+										<ShowPinIcon className="size-4 shrink-0 text-muted-foreground" />
 									</Button>
 								</div>
 							</FormControl>

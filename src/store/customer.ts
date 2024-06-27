@@ -5,16 +5,19 @@ import { Customer } from '@/lib/types'
 
 type CustomerState = {
 	nationalityIds: Customer['nationalityId'][]
+	selectedNationalityIds: Customer['nationalityId'][]
 }
 
 type CustomerActions = {
 	actions: {
 		addNationalityId: (nationalityId: Customer['nationalityId']) => void
+		toggleNationalityId: (nationalityId: Customer['nationalityId']) => void
 	}
 }
 
 const initialState: CustomerState = {
 	nationalityIds: [],
+	selectedNationalityIds: [],
 }
 
 const customerStore = create<CustomerState & CustomerActions>()(
@@ -25,6 +28,18 @@ const customerStore = create<CustomerState & CustomerActions>()(
 				addNationalityId: (nationalityId) =>
 					set((state) => ({
 						nationalityIds: [...state.nationalityIds, nationalityId],
+					})),
+				toggleNationalityId: (nationalityId) =>
+					set((state) => ({
+						selectedNationalityIds: state.selectedNationalityIds.find(
+							(selectedNationalityId) =>
+								selectedNationalityId === nationalityId,
+						)
+							? state.selectedNationalityIds.filter(
+									(selectedNationalityId) =>
+										selectedNationalityId !== nationalityId,
+								)
+							: [...state.selectedNationalityIds, nationalityId],
 					})),
 			},
 		}),
@@ -38,6 +53,8 @@ const customerStore = create<CustomerState & CustomerActions>()(
 	),
 )
 
-export const useCustomerNationalityIds = () =>
+export const useNationalityIds = () =>
 	customerStore((state) => state.nationalityIds)
+export const useSelectedNationalityIds = () =>
+	customerStore((state) => state.selectedNationalityIds)
 export const useCustomerActions = () => customerStore((state) => state.actions)

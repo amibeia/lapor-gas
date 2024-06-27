@@ -3,6 +3,7 @@
 import { ArrowDownIcon, BadgeCheckIcon } from 'lucide-react'
 
 import NationalityIdItemList from '@/components/customer/nationality-id-item-list'
+import SelectAllNationalityIdsButton from '@/components/customer/select-all-nationality-ids-button'
 import ActionButton from '@/components/global/action-button'
 import { Button } from '@/components/ui/button'
 import {
@@ -30,6 +31,9 @@ export default function VerifyCustomersDrawer() {
 					</DrawerDescription>
 				</DrawerHeader>
 				<section className="flex flex-1 flex-col overflow-auto p-4">
+					<section className="flex items-center">
+						<SelectAllNationalityIdsButton />
+					</section>
 					<NationalityIdItemList className="flex-1 px-4" />
 					<Separator className="mb-4" />
 					<div className="flex items-center justify-between gap-4">

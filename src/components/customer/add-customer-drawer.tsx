@@ -29,10 +29,10 @@ export default function AddCustomerDrawer() {
 						Masukkan NIK pelanggan baru untuk mendaftarkan mereka ke sistem.
 					</DrawerDescription>
 				</DrawerHeader>
-				<section className="flex flex-1 flex-col gap-4 p-4">
-					<AddCustomerForm />
+				<section className="flex flex-1 flex-col gap-4">
+					<AddCustomerForm className="px-4 pt-4" />
 					<Separator />
-					<div className="flex items-center justify-between gap-4">
+					<div className="flex items-center justify-between gap-4 px-4 pb-4">
 						<DrawerClose asChild>
 							<Button
 								variant="outline"

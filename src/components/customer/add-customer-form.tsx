@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input'
 
 import { NATIONALITY_ID_LENGTH } from '@/lib/constants'
-import { mergeRefs } from '@/lib/utils'
+import { cn, mergeRefs } from '@/lib/utils'
 import { useCustomerActions, useNationalityIds } from '@/store/customer'
 
 const FormSchema = z.object({
@@ -26,7 +26,12 @@ const FormSchema = z.object({
 
 type FormSchemaType = z.infer<typeof FormSchema>
 
-export default function AddCustomerForm() {
+interface AddCustomerFormProps extends React.ComponentPropsWithoutRef<'form'> {}
+
+export default function AddCustomerForm({
+	className,
+	...props
+}: AddCustomerFormProps) {
 	const nationalityIds = useNationalityIds()
 	const customerActions = useCustomerActions()
 	const autoFocusRef = useRef<React.ComponentRef<typeof Input>>(null)
@@ -57,7 +62,8 @@ export default function AddCustomerForm() {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex flex-wrap items-center gap-2"
+				className={cn('flex flex-wrap items-center gap-2', className)}
+				{...props}
 			>
 				<FormField
 					control={form.control}

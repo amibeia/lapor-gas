@@ -22,6 +22,7 @@ import {
 	MIN_PHONE_NUMBER_LENGTH,
 	PIN_LENGTH,
 } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import { useUserActions, useUserCredential } from '@/store/user'
 
 const FormSchema = z.object({
@@ -34,7 +35,13 @@ const FormSchema = z.object({
 
 type FormSchemaType = z.infer<typeof FormSchema>
 
-export default function UserCredentialForm() {
+interface UserCredentialFormProps
+	extends React.ComponentPropsWithoutRef<'form'> {}
+
+export default function UserCredentialForm({
+	className,
+	...props
+}: UserCredentialFormProps) {
 	const [isEdit, setIsEdit] = useState(false)
 	const [isShowPin, setIsShowPin] = useState(false)
 	const userCredential = useUserCredential()
@@ -81,7 +88,8 @@ export default function UserCredentialForm() {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex flex-wrap items-center gap-2"
+				className={cn('flex flex-wrap items-center gap-2', className)}
+				{...props}
 			>
 				<FormField
 					control={form.control}

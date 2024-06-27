@@ -20,11 +20,15 @@ export default function SelectAllNationalityIdsButton() {
 	}
 
 	const isSelectAll = selectedNationalityIds.length === nationalityIds.length
-
 	const Icon = isSelectAll ? SquareCheckIcon : SquareIcon
 
 	return (
-		<Button variant="ghost" size="sm" onClick={handleClick} className="gap-2">
+		<Button
+			variant="ghost"
+			size="sm"
+			onClick={handleClick}
+			className="w-[140px] flex-grow-0 justify-start gap-2"
+		>
 			<Icon className="size-4 shrink-0" />
 			<span>{isSelectAll ? 'Hapus Pilihan' : 'Pilih Semua'}</span>
 		</Button>

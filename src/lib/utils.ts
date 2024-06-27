@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
 import { ErrorResponse, MutableRefList } from '@/lib/types'
+import { LAZY_COMPONENT_DELAY } from './constants'
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -25,4 +26,8 @@ export function setRef<T>(val: T, ...refs: MutableRefList<T>): void {
 			ref.current = val
 		}
 	})
+}
+
+export async function delay(duration: number = LAZY_COMPONENT_DELAY) {
+	return new Promise((resolve) => setTimeout(resolve, duration))
 }

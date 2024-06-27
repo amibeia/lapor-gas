@@ -46,10 +46,10 @@ export default function UserAuthenticationDrawer() {
 						Masukkan nomor telepon dan PIN untuk keamanan akun Anda.
 					</DrawerDescription>
 				</DrawerHeader>
-				<section className="flex flex-1 flex-col gap-4 p-4">
-					<UserCredentialForm />
+				<section className="flex flex-1 flex-col gap-4">
+					<UserCredentialForm className="px-4 pt-4" />
 					<Separator />
-					<div className="flex items-center justify-between gap-4">
+					<div className="flex items-center justify-between gap-4 px-4 pb-4">
 						<DrawerClose asChild>
 							<Button
 								variant="outline"

@@ -7,13 +7,13 @@ import {
 	LOGIN_ENDPOINT,
 	LOGIN_URL,
 	LoginResponse,
-	MY_PERTAMINA_ERROR_RESPONSE,
 	PROFILE_ENDPOINT,
 	USER_DATA_LOCAL_STORAGE_KEY,
 	VERIFY_NATIONALITY_ID_URL,
 } from '@/lib/my-pertamina'
 import { createBrowser, setupPage } from '@/lib/puppeteer'
 import { ErrorResponse, UserAuth, UserCredential } from '@/lib/types'
+import { getMyPertaminaErrorResponse } from '@/lib/utils'
 
 export async function setupAuth(page: Page, auth: UserAuth) {
 	await page.goto(LOGIN_URL, { waitUntil: 'networkidle2' })
@@ -52,7 +52,7 @@ export async function login(
 	if (!loginRes.ok()) {
 		await browser.close()
 
-		return MY_PERTAMINA_ERROR_RESPONSE.INVALID_CREDENTIALS
+		return getMyPertaminaErrorResponse('INVALID_CREDENTIALS')
 	}
 
 	const loginResBody: LoginResponse = await loginRes.json()
@@ -79,7 +79,7 @@ export async function logout(auth: UserAuth): Promise<null | ErrorResponse> {
 	if (!profileRes.ok() && profileRes.status() === 401) {
 		await browser.close()
 
-		return MY_PERTAMINA_ERROR_RESPONSE.INVALID_COOKIES
+		return getMyPertaminaErrorResponse('INVALID_COOKIES')
 	}
 
 	await page.locator('div[data-testid="btnLogout"]').click()

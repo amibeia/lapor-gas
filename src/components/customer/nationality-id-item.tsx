@@ -1,12 +1,16 @@
 'use client'
 
-import { BadgeIcon, SquareCheckIcon, SquareIcon } from 'lucide-react'
+import { LoaderCircleIcon, SquareCheckIcon, SquareIcon } from 'lucide-react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
 
 import { Customer } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { useCustomerActions, useSelectedNationalityIds } from '@/store/customer'
+import {
+	useCustomerActions,
+	useProceedNationalityId,
+	useSelectedNationalityIds,
+} from '@/store/customer'
 
 interface NationalityIdItemProps extends React.ComponentPropsWithoutRef<'div'> {
 	nationalityId: Customer['nationalityId']
@@ -18,14 +22,15 @@ export default function NationalityIdItem({
 	...props
 }: NationalityIdItemProps) {
 	const selectedNationalityIds = useSelectedNationalityIds()
+	const proceedNationalityId = useProceedNationalityId()
 	const customerActions = useCustomerActions()
 
+	const isProceed = proceedNationalityId === nationalityId
 	const isSelected = Boolean(
 		selectedNationalityIds.find(
 			(selectedNationalityId) => selectedNationalityId === nationalityId,
 		),
 	)
-
 	const SelectedIcon = isSelected ? SquareCheckIcon : SquareIcon
 
 	const handleClick = () => {
@@ -35,7 +40,10 @@ export default function NationalityIdItem({
 	return (
 		<div
 			className={cn(
-				buttonVariants({ variant: 'secondary', size: 'sm' }),
+				buttonVariants({
+					variant: isProceed ? 'default' : 'secondary',
+					size: 'sm',
+				}),
 				'justify-between',
 				className,
 			)}
@@ -48,11 +56,13 @@ export default function NationalityIdItem({
 					onClick={handleClick}
 					className="size-6 shrink-0 rounded-full"
 				>
-					<SelectedIcon className="size-4 shrink-0 fill-background" />
+					<SelectedIcon className="size-4 shrink-0 fill-background text-foreground" />
 				</Button>
 				<span className="font-mono font-semibold">{nationalityId}</span>
 			</div>
-			<BadgeIcon className="size-4 shrink-0 fill-background" />
+			{isProceed && (
+				<LoaderCircleIcon className="size-4 shrink-0 animate-spin" />
+			)}
 		</div>
 	)
 }

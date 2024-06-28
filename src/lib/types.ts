@@ -1,4 +1,5 @@
 import { Cookie } from 'puppeteer'
+import { CUSTOMER_TYPES } from './constants'
 
 export type UserCredential = {
 	phoneNumber: string
@@ -19,9 +20,24 @@ export type UserAuth = {
 	settings: AuthSettings
 }
 
+export type CustomerType = (typeof CUSTOMER_TYPES)[number]
 export type Customer = {
 	id: string
 	nationalityId: string
+	name: string
+	email: string
+	phoneNumber: string
+	types: CustomerType[]
+	channel: string
+	quotas: {
+		houseHold: number
+		microBusiness: number
+	}
+	flags: {
+		isAgreedTermsConditions: boolean
+		isCompleted: boolean
+		isSubsidy: boolean
+	}
 }
 
 export type ErrorResponse = {
@@ -32,3 +48,8 @@ export type ErrorResponse = {
 export type MutableRefList<T> = Array<
 	React.RefCallback<T> | React.MutableRefObject<T> | undefined | null
 >
+
+export type NanoIdArgs = {
+	prefix?: string
+	size?: number
+}

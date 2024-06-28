@@ -9,26 +9,51 @@ export const LOGIN_ENDPOINT =
 	'https://api-map.my-pertamina.id/general/v1/users/login'
 export const PROFILE_ENDPOINT =
 	'https://api-map.my-pertamina.id/general/v1/users/profile'
+export const VERIFY_NATIONALITY_ID_ENDPOINT =
+	'https://api-map.my-pertamina.id/customers/v1/verify-nik'
+
+export const MY_PERTAMINA_DELAY = 60 * 1000
 
 export const MY_PERTAMINA_ERRORS = [
 	'INVALID_CREDENTIALS',
 	'INVALID_COOKIES',
+	'INVALID_NATIONALITY_ID',
+	'CUSTOMER_NOT_FOUND',
+	'TOO_MANY_REQUEST',
+	'INTERNAL_SERVER_ERROR',
 ] as const
 
 export type MyPertaminaError = (typeof MY_PERTAMINA_ERRORS)[number]
 
 export const MY_PERTAMINA_ERROR_RESPONSE: Record<
 	MyPertaminaError,
-	ErrorResponse
+	(value?: string) => ErrorResponse
 > = {
-	INVALID_CREDENTIALS: {
+	INVALID_CREDENTIALS: () => ({
 		code: 401,
 		message: 'Login gagal. Nomor telepon atau PIN salah. Harap coba lagi.',
-	},
-	INVALID_COOKIES: {
+	}),
+	INVALID_COOKIES: () => ({
 		code: 401,
 		message: 'Sesi Anda telah berakhir. Harap login kembali untuk melanjutkan.',
-	},
+	}),
+	INVALID_NATIONALITY_ID: (nationalityId) => ({
+		code: 400,
+		message: `NIK ${nationalityId} tidak valid. Mohon periksa kembali NIK yang Anda masukkan.`,
+	}),
+	CUSTOMER_NOT_FOUND: (nationalityId) => ({
+		code: 404,
+		message: `Pelanggan dengan NIK ${nationalityId} tidak ditemukan. Mohon daftarkan pelanggan terlebih dahulu.`,
+	}),
+	TOO_MANY_REQUEST: () => ({
+		code: 429,
+		message:
+			'Terlalu banyak permintaan. Mohon tunggu 1 menit sebelum mencoba lagi.',
+	}),
+	INTERNAL_SERVER_ERROR: () => ({
+		code: 500,
+		message: 'Terjadi kesalahan yang tidak diketahui. Mohon coba lagi nanti.',
+	}),
 }
 
 export const USER_DATA_LOCAL_STORAGE_KEY = 'maplite_user_data'
@@ -49,4 +74,31 @@ type LoginData = {
 	isSubsidiProduct: boolean
 }
 
+type QuotaRemaining = {
+	individu: number
+	family: number
+}
+
+type CustomerType = {
+	name: string
+	sourceTypeId: number
+	status: number
+	verifications: any[]
+}
+
+type VerifyNationalityIdData = {
+	nationalityId: string
+	name: string
+	email: string
+	phoneNumber: string
+	businessType: string
+	quotaRemaining: QuotaRemaining
+	customerTypes: CustomerType[]
+	channelInject: string
+	isAgreedTermsConditions: boolean
+	isCompleted: boolean
+	isSubsidi: boolean
+}
+
 export type LoginResponse = Response<LoginData>
+export type VerifyNationalityIdResponse = Response<VerifyNationalityIdData>

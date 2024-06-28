@@ -5,6 +5,9 @@ export const MIN_PHONE_NUMBER_LENGTH = 10
 export const MAX_PHONE_NUMBER_LENGTH = 13
 export const NATIONALITY_ID_LENGTH = 16
 
+export const CUSTOMER_PREFIX_ID = 'C'
+export const CUSTOMER_TYPES = ['rumah-tangga', 'usaha-mikro'] as const
+
 export const QUERY_PARAM = 'query'
 
 export const LAZY_COMPONENT_DELAY = 2 * 1000

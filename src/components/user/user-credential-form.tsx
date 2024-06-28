@@ -23,7 +23,7 @@ import {
 	PIN_LENGTH,
 } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { useUserActions, useUserCredential } from '@/store/user'
+import { useCredential, useUserActions } from '@/store/user'
 
 const FormSchema = z.object({
 	phoneNumber: z
@@ -44,35 +44,35 @@ export default function UserCredentialForm({
 }: UserCredentialFormProps) {
 	const [isEdit, setIsEdit] = useState(false)
 	const [isShowPin, setIsShowPin] = useState(false)
-	const userCredential = useUserCredential()
+	const credential = useCredential()
 	const userActions = useUserActions()
 
 	const form = useForm<FormSchemaType>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			phoneNumber: userCredential ? userCredential.phoneNumber : '',
-			pin: userCredential ? userCredential.pin : '',
+			phoneNumber: credential ? credential.phoneNumber : '',
+			pin: credential ? credential.pin : '',
 		},
 	})
 
-	const onSubmit = (credential: FormSchemaType) => {
-		if (userCredential && !isEdit) {
+	const onSubmit = (userCredential: FormSchemaType) => {
+		if (credential && !isEdit) {
 			return setIsEdit(true)
 		}
 
 		if (
-			userCredential &&
-			userCredential.phoneNumber === credential.phoneNumber &&
-			userCredential.pin === credential.pin
+			credential &&
+			credential.phoneNumber === userCredential.phoneNumber &&
+			credential.pin === userCredential.pin
 		) {
 			return toast.info(
 				'Perubahan tidak tersimpan. Data baru sama dengan data sebelumnya.',
 			)
 		}
 
-		userActions.setCredential(credential)
+		userActions.setCredential(userCredential)
 		toast.success(
-			userCredential
+			credential
 				? 'Data berhasil disimpan! Nomor telepon dan PIN Anda telah tersimpan dengan aman.'
 				: 'Perubahan berhasil! Nomor telepon dan PIN Anda telah diperbarui.',
 		)
@@ -81,7 +81,7 @@ export default function UserCredentialForm({
 		setIsShowPin(false)
 	}
 
-	const isEditMode = !!userCredential && !isEdit
+	const isEditMode = !!credential && !isEdit
 	const ShowPinIcon = isShowPin ? EyeOffIcon : EyeIcon
 
 	return (
@@ -164,11 +164,11 @@ export default function UserCredentialForm({
 					disabled={!form.formState.isValid}
 					className="flex-grow basis-[150px]"
 				>
-					{!!userCredential && !isEdit
+					{!!credential && !isEdit
 						? 'Edit Data'
-						: !!userCredential && isEdit
+						: !!credential && isEdit
 							? 'Simpan Perubahan'
-							: !userCredential && !isEdit
+							: !credential && !isEdit
 								? 'Simpan Kredensial'
 								: ''}
 				</Button>

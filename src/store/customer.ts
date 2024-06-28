@@ -6,6 +6,8 @@ import { Customer } from '@/lib/types'
 type CustomerState = {
 	nationalityIds: Customer['nationalityId'][]
 	selectedNationalityIds: Customer['nationalityId'][]
+	customers: Customer[]
+	proceedNationalityId: Customer['nationalityId'] | null
 }
 
 type CustomerActions = {
@@ -13,12 +15,18 @@ type CustomerActions = {
 		addNationalityId: (nationalityId: Customer['nationalityId']) => void
 		toggleNationalityId: (nationalityId: Customer['nationalityId']) => void
 		toggleAllSelectedNationalityIds: () => void
+		addCustomer: (customer: Customer) => void
+		setProceedNationalityId: (
+			nationalityId: Customer['nationalityId'] | null,
+		) => void
 	}
 }
 
 const initialState: CustomerState = {
 	nationalityIds: [],
 	selectedNationalityIds: [],
+	customers: [],
+	proceedNationalityId: null,
 }
 
 const customerStore = create<CustomerState & CustomerActions>()(
@@ -50,6 +58,10 @@ const customerStore = create<CustomerState & CustomerActions>()(
 								? []
 								: [...state.nationalityIds],
 					})),
+				addCustomer: (customer) =>
+					set((state) => ({ customers: [...state.customers, customer] })),
+				setProceedNationalityId: (nationalityId) =>
+					set({ proceedNationalityId: nationalityId }),
 			},
 		}),
 		{
@@ -57,6 +69,8 @@ const customerStore = create<CustomerState & CustomerActions>()(
 			storage: createJSONStorage(() => localStorage),
 			partialize: (state) => ({
 				nationalityIds: state.nationalityIds,
+				selectedNationalityIds: state.selectedNationalityIds,
+				customers: state.customers,
 			}),
 		},
 	),
@@ -66,4 +80,6 @@ export const useNationalityIds = () =>
 	customerStore((state) => state.nationalityIds)
 export const useSelectedNationalityIds = () =>
 	customerStore((state) => state.selectedNationalityIds)
+export const useProceedNationalityId = () =>
+	customerStore((state) => state.proceedNationalityId)
 export const useCustomerActions = () => customerStore((state) => state.actions)

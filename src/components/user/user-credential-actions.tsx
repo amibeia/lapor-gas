@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 
 import { login, logout } from '@/actions/user'
 import { isErrorResponse } from '@/lib/utils'
-import { useUserActions, useUserAuth, useUserCredential } from '@/store/user'
+import { useAuth, useCredential, useUserActions } from '@/store/user'
 
 interface UserCredentialActionsProps {
 	onSubmit: () => void
@@ -17,14 +17,14 @@ interface UserCredentialActionsProps {
 export default function UserCredentialActions({
 	onSubmit,
 }: UserCredentialActionsProps) {
-	const userCredential = useUserCredential()
-	const userAuth = useUserAuth()
+	const credential = useCredential()
+	const auth = useAuth()
 	const userActions = useUserActions()
 
 	const handleLogoutAction = async () => {
-		if (!userAuth) return
+		if (!auth) return
 
-		const logoutRes = await logout(userAuth)
+		const logoutRes = await logout(auth)
 
 		userActions.setAuth(null)
 
@@ -38,9 +38,9 @@ export default function UserCredentialActions({
 	}
 
 	const handleLoginAction = async () => {
-		if (!userCredential) return
+		if (!credential) return
 
-		const loginRes = await login(userCredential.phoneNumber, userCredential.pin)
+		const loginRes = await login(credential.phoneNumber, credential.pin)
 		if (isErrorResponse(loginRes)) {
 			return toast.error(loginRes.message)
 		}
@@ -64,15 +64,11 @@ export default function UserCredentialActions({
 }
 
 function LogoutButton() {
-	const userAuth = useUserAuth()
+	const auth = useAuth()
 	const { pending } = useFormStatus()
 
 	return (
-		<Button
-			variant="secondary"
-			disabled={!userAuth || pending}
-			className="gap-2"
-		>
+		<Button variant="secondary" disabled={!auth || pending} className="gap-2">
 			{pending ? (
 				<LoaderCircleIcon className="size-4 shrink-0 animate-spin" />
 			) : (
@@ -84,15 +80,12 @@ function LogoutButton() {
 }
 
 function LoginButton() {
-	const userCredential = useUserCredential()
-	const userAuth = useUserAuth()
+	const credential = useCredential()
+	const auth = useAuth()
 	const { pending } = useFormStatus()
 
 	return (
-		<Button
-			disabled={!!userAuth || !userCredential || pending}
-			className="gap-2"
-		>
+		<Button disabled={!!auth || !credential || pending} className="gap-2">
 			{pending ? (
 				<LoaderCircleIcon className="size-4 shrink-0 animate-spin" />
 			) : (

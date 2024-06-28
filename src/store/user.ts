@@ -40,6 +40,6 @@ const userStore = create<UserState & UserActions>()(
 	),
 )
 
-export const useUserCredential = () => userStore((state) => state.credential)
-export const useUserAuth = () => userStore((state) => state.auth)
+export const useCredential = () => userStore((state) => state.credential)
+export const useAuth = () => userStore((state) => state.auth)
 export const useUserActions = () => userStore((state) => state.actions)

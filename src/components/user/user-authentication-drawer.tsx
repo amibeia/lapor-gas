@@ -18,17 +18,17 @@ import { Separator } from '@/components/ui/separator'
 import UserCredentialActions from '@/components/user/user-credential-actions'
 import UserCredentialForm from '@/components/user/user-credential-form'
 
-import { useUserAuth } from '@/store/user'
+import { useAuth } from '@/store/user'
 
 export default function UserAuthenticationDrawer() {
 	const [open, setOpen] = useState(false)
-	const userAuth = useUserAuth()
+	const auth = useAuth()
 
 	return (
 		<Drawer open={open} onOpenChange={setOpen}>
 			<div className="flex size-fit items-center justify-center gap-2 rounded-full bg-secondary p-1 text-secondary-foreground shadow-sm">
 				<Avatar className="shrink-0">
-					<AvatarImage src={userAuth ? 'assets/default-avatar.svg' : ''} />
+					<AvatarImage src={auth ? 'assets/default-avatar.svg' : ''} />
 					<AvatarFallback>
 						<UserRoundIcon className="size-4 shrink-0" />
 					</AvatarFallback>

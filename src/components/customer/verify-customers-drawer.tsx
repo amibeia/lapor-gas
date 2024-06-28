@@ -4,6 +4,7 @@ import { ArrowDownIcon, BadgeCheckIcon } from 'lucide-react'
 import { Suspense, lazy } from 'react'
 
 import SelectAllNationalityIdsButton from '@/components/customer/select-all-nationality-ids-button'
+import VerifyCustomerAction from '@/components/customer/verify-customer-action'
 import ActionButton from '@/components/global/action-button'
 import NationalityIdItemListSkeleton from '@/components/skeleton/nationality-id-item-list-skeleton'
 import NationalityIdSearchSkeleton from '@/components/skeleton/nationality-id-search-skeleton'
@@ -90,6 +91,7 @@ export default function VerifyCustomersDrawer() {
 								<ArrowDownIcon className="size-4 shrink-0" />
 							</Button>
 						</DrawerClose>
+						<VerifyCustomerAction />
 					</div>
 				</section>
 			</DrawerContent>

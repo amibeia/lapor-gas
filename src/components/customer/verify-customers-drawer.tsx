@@ -4,11 +4,11 @@ import { ArrowDownIcon, BadgeCheckIcon } from 'lucide-react'
 import { Suspense, lazy } from 'react'
 
 import CustomerDelayCountDown from '@/components/customer/customer-delay-countdown'
-import SelectAllNationalityIdsButton from '@/components/customer/select-all-nationality-ids-button'
 import VerifyCustomerAction from '@/components/customer/verify-customer-action'
 import ActionButton from '@/components/global/action-button'
 import NationalityIdItemListSkeleton from '@/components/skeleton/nationality-id-item-list-skeleton'
 import NationalityIdSearchSkeleton from '@/components/skeleton/nationality-id-search-skeleton'
+import SelectAllNationalityIdsButtonSkeleton from '@/components/skeleton/select-all-nationality-ids-button-skeleton'
 import { Button } from '@/components/ui/button'
 import {
 	Drawer,
@@ -43,6 +43,15 @@ const NationalityIdItemList = lazy(async () => {
 	return moduleExports
 })
 
+const SelectAllNationalityIdsButton = lazy(async () => {
+	const [moduleExports] = await Promise.all([
+		import('@/components/customer/select-all-nationality-ids-button'),
+		delay(),
+	])
+
+	return moduleExports
+})
+
 export default function VerifyCustomersDrawer() {
 	const nationalityIds = useNationalityIds()
 	const selectedNationalityIds = useSelectedNationalityIds()
@@ -64,7 +73,9 @@ export default function VerifyCustomersDrawer() {
 					{nationalityIds.length !== 0 && (
 						<section className="flex flex-wrap justify-between gap-4 px-4 pb-2 pt-4">
 							<div className="flex flex-col gap-1">
-								<SelectAllNationalityIdsButton />
+								<Suspense fallback={<SelectAllNationalityIdsButtonSkeleton />}>
+									<SelectAllNationalityIdsButton />
+								</Suspense>
 								<p className="ml-9 flex w-[100px] items-center gap-1 text-xs text-muted-foreground">
 									<span>Terpilih</span>
 									<span className="font-semibold text-primary">

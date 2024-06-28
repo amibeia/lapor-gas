@@ -26,8 +26,6 @@ export default function NationalityIdSearch() {
 
 		const urlSearchParams = new URLSearchParams(searchParams)
 
-		console.log('value:', { value })
-
 		value
 			? urlSearchParams.set(QUERY_PARAM, value)
 			: urlSearchParams.delete(QUERY_PARAM)

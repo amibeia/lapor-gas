@@ -1,9 +1,11 @@
 'use client'
 
 import { SquareCheckIcon, SquareIcon } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 
+import { QUERY_PARAM } from '@/lib/constants'
 import {
 	useCustomerActions,
 	useNationalityIds,
@@ -14,13 +16,20 @@ export default function SelectAllNationalityIdsButton() {
 	const nationalityIds = useNationalityIds()
 	const selectedNationalityIds = useSelectedNationalityIds()
 	const customerActions = useCustomerActions()
+	const searchParams = useSearchParams()
+
+	const query = searchParams.get(QUERY_PARAM) || ''
+	const filteredNationalityIds = nationalityIds.filter((nationalityId) =>
+		nationalityId.startsWith(query),
+	)
+
+	const isSelectAll =
+		selectedNationalityIds.length === filteredNationalityIds.length
+	const Icon = isSelectAll ? SquareCheckIcon : SquareIcon
 
 	const handleClick = () => {
-		customerActions.toggleAllSelectedNationalityIds()
+		customerActions.toggleAllSelectedNationalityIds(filteredNationalityIds)
 	}
-
-	const isSelectAll = selectedNationalityIds.length === nationalityIds.length
-	const Icon = isSelectAll ? SquareCheckIcon : SquareIcon
 
 	return (
 		<Button

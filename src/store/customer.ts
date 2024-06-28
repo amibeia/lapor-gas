@@ -14,7 +14,9 @@ type CustomerActions = {
 	actions: {
 		addNationalityId: (nationalityId: Customer['nationalityId']) => void
 		toggleNationalityId: (nationalityId: Customer['nationalityId']) => void
-		toggleAllSelectedNationalityIds: () => void
+		toggleAllSelectedNationalityIds: (
+			nationalityIds: Customer['nationalityId'][],
+		) => void
 		addCustomer: (customer: Customer) => void
 		setProceedNationalityId: (
 			nationalityId: Customer['nationalityId'] | null,
@@ -50,13 +52,12 @@ const customerStore = create<CustomerState & CustomerActions>()(
 								)
 							: [...state.selectedNationalityIds, nationalityId],
 					})),
-				toggleAllSelectedNationalityIds: () =>
+				toggleAllSelectedNationalityIds: (nationalityIds) =>
 					set((state) => ({
 						selectedNationalityIds:
-							state.selectedNationalityIds.length ===
-							state.nationalityIds.length
+							state.selectedNationalityIds.length === nationalityIds.length
 								? []
-								: [...state.nationalityIds],
+								: [...nationalityIds],
 					})),
 				addCustomer: (customer) =>
 					set((state) => ({ customers: [...state.customers, customer] })),

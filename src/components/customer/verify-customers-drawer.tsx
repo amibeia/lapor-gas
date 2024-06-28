@@ -84,6 +84,7 @@ export default function VerifyCustomersDrawer() {
 									<span>NIK</span>
 								</p>
 							</div>
+							{isDelayed && <CustomerDelayCountDown />}
 							<Suspense fallback={<NationalityIdSearchSkeleton />}>
 								<NationalityIdSearch />
 							</Suspense>
@@ -105,10 +106,7 @@ export default function VerifyCustomersDrawer() {
 								<ArrowDownIcon className="size-4 shrink-0" />
 							</Button>
 						</DrawerClose>
-						<div className="flex items-center gap-4">
-							{isDelayed && <CustomerDelayCountDown />}
-							<VerifyCustomerAction />
-						</div>
+						<VerifyCustomerAction />
 					</div>
 				</section>
 			</DrawerContent>

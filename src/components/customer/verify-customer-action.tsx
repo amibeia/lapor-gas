@@ -48,7 +48,6 @@ export default function VerifyCustomerAction() {
 				layoutActions.setIsDelayed(true)
 				await delay(MY_PERTAMINA_DELAY)
 				layoutActions.setIsDelayed(false)
-
 				continue
 			}
 
@@ -60,7 +59,10 @@ export default function VerifyCustomerAction() {
 				continue
 			}
 
-			customerActions.addCustomer(verifyCustomerRes)
+			customerActions.verifyCustomer({
+				...verifyCustomerRes,
+				nationalityId: selectedNationalityId,
+			})
 			customerActions.setProceedNationalityId(null)
 			customerActions.toggleNationalityId(selectedNationalityId)
 			toast.success(
@@ -72,9 +74,11 @@ export default function VerifyCustomerAction() {
 	}
 
 	return (
-		<form action={handleVerifyCustomerAction}>
-			<VerifyCustomerButton />
-		</form>
+		<div className="flex items-center gap-2">
+			<form action={handleVerifyCustomerAction}>
+				<VerifyCustomerButton />
+			</form>
+		</div>
 	)
 }
 
@@ -93,7 +97,7 @@ function VerifyCustomerButton() {
 			) : (
 				<BadgeCheckIcon className="size-4 shrink-0" />
 			)}
-			<span>Verify Customer</span>
+			<span>Verifikasi Pelanggan</span>
 		</Button>
 	)
 }

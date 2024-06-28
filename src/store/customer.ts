@@ -17,7 +17,7 @@ type CustomerActions = {
 		toggleAllSelectedNationalityIds: (
 			nationalityIds: Customer['nationalityId'][],
 		) => void
-		addCustomer: (customer: Customer) => void
+		verifyCustomer: (customerToVerified: Customer) => void
 		setProceedNationalityId: (
 			nationalityId: Customer['nationalityId'] | null,
 		) => void
@@ -59,8 +59,20 @@ const customerStore = create<CustomerState & CustomerActions>()(
 								? []
 								: [...nationalityIds],
 					})),
-				addCustomer: (customer) =>
-					set((state) => ({ customers: [...state.customers, customer] })),
+				verifyCustomer: (customerToVerified) =>
+					set((state) => ({
+						customers: state.customers.find(
+							(customer) =>
+								customer.nationalityId === customerToVerified.nationalityId,
+						)
+							? state.customers.map((customer) => {
+									return customer.nationalityId ===
+										customerToVerified.nationalityId
+										? customerToVerified
+										: customer
+								})
+							: [...state.customers, customerToVerified],
+					})),
 				setProceedNationalityId: (nationalityId) =>
 					set({ proceedNationalityId: nationalityId }),
 			},
@@ -81,6 +93,7 @@ export const useNationalityIds = () =>
 	customerStore((state) => state.nationalityIds)
 export const useSelectedNationalityIds = () =>
 	customerStore((state) => state.selectedNationalityIds)
+export const useCustomers = () => customerStore((state) => state.customers)
 export const useProceedNationalityId = () =>
 	customerStore((state) => state.proceedNationalityId)
 export const useCustomerActions = () => customerStore((state) => state.actions)

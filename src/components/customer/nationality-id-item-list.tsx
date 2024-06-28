@@ -2,6 +2,7 @@
 
 import { UserRoundXIcon } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
+import { useEffect, useRef } from 'react'
 
 import NationalityIdItem from '@/components/customer/nationality-id-item'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -12,7 +13,7 @@ import {
 	TOAST_INFO_TEXT_COLOR,
 } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { useNationalityIds } from '@/store/customer'
+import { useNationalityIds, useProceedNationalityId } from '@/store/customer'
 
 interface NationalityIdItemListProps
 	extends React.ComponentPropsWithoutRef<typeof ScrollArea> {}
@@ -21,18 +22,32 @@ export default function NationalityIdItemList(
 	props: NationalityIdItemListProps,
 ) {
 	const nationalityIds = useNationalityIds()
+	const proceedNationalityId = useProceedNationalityId()
 	const searchParams = useSearchParams()
+	const autoFocusRef =
+		useRef<React.ComponentRef<typeof NationalityIdItem>>(null)
 
 	const query = searchParams.get(QUERY_PARAM) || ''
 	const filteredNationalityIds = nationalityIds.filter((nationalityId) =>
 		nationalityId.startsWith(query),
 	)
 
+	useEffect(() => {
+		proceedNationalityId &&
+			autoFocusRef.current &&
+			autoFocusRef.current.scrollIntoView({ behavior: 'smooth' })
+	}, [proceedNationalityId])
+
 	return filteredNationalityIds.length !== 0 ? (
 		<ScrollArea {...props}>
 			<section className="flex flex-col gap-2">
 				{filteredNationalityIds.map((customerNationalityId, index) => (
 					<NationalityIdItem
+						ref={
+							customerNationalityId === proceedNationalityId
+								? autoFocusRef
+								: null
+						}
 						key={customerNationalityId}
 						nationalityId={customerNationalityId}
 						className={cn(

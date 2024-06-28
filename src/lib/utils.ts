@@ -73,3 +73,22 @@ export function getMyPertaminaErrorResponse(
 			return MY_PERTAMINA_ERROR_RESPONSE.INTERNAL_SERVER_ERROR()
 	}
 }
+
+export function millisecondsToTime(milliseconds: number) {
+	const seconds = Math.floor(milliseconds / 1000)
+	const minutes = Math.floor(seconds / 60)
+	const hours = Math.floor(minutes / 60)
+
+	return {
+		seconds: seconds % 60,
+		minutes: minutes % 60,
+		hours: hours % 24,
+	}
+}
+
+export function toTwoDigits(num: number) {
+	return num.toLocaleString('en-US', {
+		minimumIntegerDigits: 2,
+		useGrouping: false,
+	})
+}

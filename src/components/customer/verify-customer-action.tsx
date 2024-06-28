@@ -14,12 +14,14 @@ import {
 	isErrorResponse,
 } from '@/lib/utils'
 import { useCustomerActions, useSelectedNationalityIds } from '@/store/customer'
+import { useLayoutActions } from '@/store/layout'
 import { useAuth } from '@/store/user'
 
 export default function VerifyCustomerAction() {
 	const auth = useAuth()
 	const selectedNationalityIds = useSelectedNationalityIds()
 	const customerActions = useCustomerActions()
+	const layoutActions = useLayoutActions()
 
 	const handleVerifyCustomerAction = async () => {
 		if (!auth) return
@@ -42,7 +44,11 @@ export default function VerifyCustomerAction() {
 			) {
 				toast.error(verifyCustomerRes.message)
 				customerActions.setProceedNationalityId(null)
+
+				layoutActions.setIsDelayed(true)
 				await delay(MY_PERTAMINA_DELAY)
+				layoutActions.setIsDelayed(false)
+
 				continue
 			}
 
@@ -58,7 +64,7 @@ export default function VerifyCustomerAction() {
 			customerActions.setProceedNationalityId(null)
 			customerActions.toggleNationalityId(selectedNationalityId)
 			toast.success(
-				`Pelanggan dengan NIK ${verifyCustomerRes.nationalityId} berhasil diverifikasi.`,
+				`Pelanggan dengan NIK ${selectedNationalityId} berhasil diverifikasi.`,
 			)
 
 			index += 1

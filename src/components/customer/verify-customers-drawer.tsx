@@ -3,6 +3,7 @@
 import { ArrowDownIcon, BadgeCheckIcon } from 'lucide-react'
 import { Suspense, lazy } from 'react'
 
+import CustomerDelayCountDown from '@/components/customer/customer-delay-countdown'
 import SelectAllNationalityIdsButton from '@/components/customer/select-all-nationality-ids-button'
 import VerifyCustomerAction from '@/components/customer/verify-customer-action'
 import ActionButton from '@/components/global/action-button'
@@ -22,6 +23,7 @@ import { Separator } from '@/components/ui/separator'
 
 import { delay } from '@/lib/utils'
 import { useNationalityIds, useSelectedNationalityIds } from '@/store/customer'
+import { useIsDelayed } from '@/store/layout'
 
 const NationalityIdSearch = lazy(async () => {
 	const [moduleExports] = await Promise.all([
@@ -44,6 +46,7 @@ const NationalityIdItemList = lazy(async () => {
 export default function VerifyCustomersDrawer() {
 	const nationalityIds = useNationalityIds()
 	const selectedNationalityIds = useSelectedNationalityIds()
+	const isDelayed = useIsDelayed()
 
 	return (
 		<Drawer dismissible={false}>
@@ -91,7 +94,10 @@ export default function VerifyCustomersDrawer() {
 								<ArrowDownIcon className="size-4 shrink-0" />
 							</Button>
 						</DrawerClose>
-						<VerifyCustomerAction />
+						<div className="flex items-center gap-4">
+							{isDelayed && <CustomerDelayCountDown />}
+							<VerifyCustomerAction />
+						</div>
 					</div>
 				</section>
 			</DrawerContent>

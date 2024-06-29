@@ -1,6 +1,11 @@
 'use client'
 
-import { LoaderCircleIcon, SquareCheckIcon, SquareIcon } from 'lucide-react'
+import {
+	BadgeCheckIcon,
+	LoaderCircleIcon,
+	SquareCheckIcon,
+	SquareIcon,
+} from 'lucide-react'
 import { forwardRef } from 'react'
 
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -9,6 +14,7 @@ import { Customer } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import {
 	useCustomerActions,
+	useCustomers,
 	useProceedNationalityId,
 	useSelectedNationalityIds,
 } from '@/store/customer'
@@ -21,9 +27,13 @@ const NationalityIdItem = forwardRef<HTMLDivElement, NationalityIdItemProps>(
 	({ nationalityId, className, ...props }, ref) => {
 		const selectedNationalityIds = useSelectedNationalityIds()
 		const proceedNationalityId = useProceedNationalityId()
+		const customers = useCustomers()
 		const customerActions = useCustomerActions()
 
 		const isProceed = proceedNationalityId === nationalityId
+		const isVerified = Boolean(
+			customers.find((customer) => customer.nationalityId === nationalityId),
+		)
 		const isSelected = Boolean(
 			selectedNationalityIds.find(
 				(selectedNationalityId) => selectedNationalityId === nationalityId,
@@ -59,8 +69,12 @@ const NationalityIdItem = forwardRef<HTMLDivElement, NationalityIdItemProps>(
 					</Button>
 					<span className="font-mono font-semibold">{nationalityId}</span>
 				</div>
-				{isProceed && (
+				{isProceed ? (
 					<LoaderCircleIcon className="size-4 shrink-0 animate-spin" />
+				) : (
+					isVerified && (
+						<BadgeCheckIcon className="size-4 shrink-0 fill-primary text-foreground" />
+					)
 				)}
 			</div>
 		)

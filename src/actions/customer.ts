@@ -1,12 +1,11 @@
 'use server'
 
-import { HTTPResponse } from 'puppeteer'
+import { HTTPResponse, Page } from 'puppeteer'
 
 import { setupAuth } from '@/actions/user'
 import { customerDTO } from '@/lib/dto'
 import {
 	MY_PERTAMINA_ERROR_RESPONSE,
-	PROFILE_ENDPOINT,
 	VERIFY_NATIONALITY_ID_ENDPOINT,
 	VERIFY_NATIONALITY_ID_URL,
 	VerifyNationalityIdResponse,
@@ -39,6 +38,15 @@ function getVerifyNationalityIdErrorResponse(
 		: getMyPertaminaErrorResponse('INTERNAL_SERVER_ERROR')
 }
 
+export async function checkCookieExpiration(
+	page: Page,
+	url: string,
+): Promise<null | ErrorResponse> {
+	const isRedirected = page.url() !== url
+
+	return isRedirected ? getMyPertaminaErrorResponse('INVALID_COOKIES') : null
+}
+
 export async function verifyCustomer(
 	auth: UserAuth,
 	nationalityId: Customer['nationalityId'],
@@ -49,16 +57,14 @@ export async function verifyCustomer(
 	await setupAuth(page, auth)
 	await page.goto(VERIFY_NATIONALITY_ID_URL)
 
-	const profileRes = await page.waitForResponse(
-		(response) =>
-			response.url() === PROFILE_ENDPOINT &&
-			response.request().method().toUpperCase() !== 'OPTIONS',
+	const cookieError = await checkCookieExpiration(
+		page,
+		VERIFY_NATIONALITY_ID_URL,
 	)
-
-	if (!profileRes.ok()) {
+	if (cookieError) {
 		await browser.close()
 
-		return getMyPertaminaErrorResponse('INVALID_COOKIES')
+		return cookieError
 	}
 
 	await page.locator('[type="search"]').fill(nationalityId)

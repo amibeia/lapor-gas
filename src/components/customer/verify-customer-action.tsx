@@ -15,12 +15,15 @@ import {
 } from '@/lib/utils'
 import { useCustomerActions, useSelectedNationalityIds } from '@/store/customer'
 import { useLayoutActions } from '@/store/layout'
-import { useAuth } from '@/store/user'
+import { useProductActions } from '@/store/product'
+import { useAuth, useUserActions } from '@/store/user'
 
 export default function VerifyCustomerAction() {
 	const auth = useAuth()
 	const selectedNationalityIds = useSelectedNationalityIds()
+	const userActions = useUserActions()
 	const customerActions = useCustomerActions()
+	const productActions = useProductActions()
 	const layoutActions = useLayoutActions()
 
 	const handleVerifyCustomerAction = async () => {
@@ -36,6 +39,18 @@ export default function VerifyCustomerAction() {
 				auth,
 				selectedNationalityId,
 			)
+
+			if (
+				isErrorResponse(verifyCustomerRes) &&
+				verifyCustomerRes.code ===
+					getMyPertaminaErrorResponse('INVALID_COOKIES').code
+			) {
+				toast.error(verifyCustomerRes.message)
+				userActions.setAuth(null)
+				userActions.setProfile(null)
+				productActions.setProduct(null)
+				break
+			}
 
 			if (
 				isErrorResponse(verifyCustomerRes) &&

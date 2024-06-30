@@ -2,18 +2,20 @@
 
 import { Page } from 'puppeteer'
 
-import { userAuthDTO } from '@/lib/dto'
+import { profileDTO, userAuthDTO } from '@/lib/dto'
 import {
 	LOGIN_ENDPOINT,
 	LOGIN_URL,
 	LoginResponse,
 	PROFILE_ENDPOINT,
+	PROFILE_URL,
+	ProfileResponse,
 	USER_DATA_LOCAL_STORAGE_KEY,
 	VERIFY_NATIONALITY_ID_URL,
 } from '@/lib/my-pertamina'
 import { createBrowser, setupPage } from '@/lib/puppeteer'
-import { ErrorResponse, UserAuth, UserCredential } from '@/lib/types'
-import { getMyPertaminaErrorResponse } from '@/lib/utils'
+import { ErrorResponse, Profile, UserAuth, UserCredential } from '@/lib/types'
+import { getMyPertaminaErrorResponse, isErrorResponse } from '@/lib/utils'
 
 export async function setupAuth(page: Page, auth: UserAuth) {
 	await page.goto(LOGIN_URL, { waitUntil: 'networkidle2' })
@@ -28,6 +30,15 @@ export async function setupAuth(page: Page, auth: UserAuth) {
 		USER_DATA_LOCAL_STORAGE_KEY,
 		auth,
 	)
+}
+
+export async function checkCookieExpiration(
+	page: Page,
+	url: string,
+): Promise<null | ErrorResponse> {
+	const isRedirected = page.url() !== url
+
+	return isRedirected ? getMyPertaminaErrorResponse('INVALID_COOKIES') : null
 }
 
 export async function login(
@@ -68,18 +79,16 @@ export async function logout(auth: UserAuth): Promise<null | ErrorResponse> {
 	const page = await setupPage(browser)
 
 	await setupAuth(page, auth)
-	await page.goto(VERIFY_NATIONALITY_ID_URL)
+	await page.goto(VERIFY_NATIONALITY_ID_URL, { waitUntil: 'networkidle0' })
 
-	const profileRes = await page.waitForResponse(
-		(response) =>
-			response.url() === PROFILE_ENDPOINT &&
-			response.request().method().toUpperCase() !== 'OPTIONS',
+	const cookieError = await checkCookieExpiration(
+		page,
+		VERIFY_NATIONALITY_ID_URL,
 	)
-
-	if (!profileRes.ok() && profileRes.status() === 401) {
+	if (isErrorResponse(cookieError)) {
 		await browser.close()
 
-		return getMyPertaminaErrorResponse('INVALID_COOKIES')
+		return cookieError
 	}
 
 	await page.locator('div[data-testid="btnLogout"]').click()
@@ -88,4 +97,39 @@ export async function logout(auth: UserAuth): Promise<null | ErrorResponse> {
 	await browser.close()
 
 	return null
+}
+
+export async function getProfile(
+	auth: UserAuth,
+): Promise<Profile | ErrorResponse> {
+	const browser = await createBrowser()
+	const page = await setupPage(browser)
+
+	await setupAuth(page, auth)
+	await page.goto(PROFILE_URL)
+
+	const cookieError = await checkCookieExpiration(page, PROFILE_URL)
+	if (cookieError) {
+		await browser.close()
+
+		return cookieError
+	}
+
+	const profileRes = await page.waitForResponse(
+		(response) =>
+			response.url() === PROFILE_ENDPOINT &&
+			response.request().method().toUpperCase() !== 'OPTIONS',
+	)
+
+	if (!profileRes.ok()) {
+		await browser.close()
+
+		return getMyPertaminaErrorResponse('INTERNAL_SERVER_ERROR')
+	}
+
+	const profileResBody: ProfileResponse = await profileRes.json()
+
+	await browser.close()
+
+	return profileDTO(profileResBody)
 }

@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 
-import { login, logout } from '@/actions/user'
+import { getProfile, login, logout } from '@/actions/user'
 import { isErrorResponse } from '@/lib/utils'
 import { useAuth, useCredential, useUserActions } from '@/store/user'
 
@@ -43,6 +43,11 @@ export default function UserCredentialActions({
 		const loginRes = await login(credential.phoneNumber, credential.pin)
 		if (isErrorResponse(loginRes)) {
 			return toast.error(loginRes.message)
+		}
+
+		const profileRes = await getProfile(loginRes)
+		if (isErrorResponse(profileRes)) {
+			return toast.error(profileRes.message)
 		}
 
 		userActions.setAuth(loginRes)

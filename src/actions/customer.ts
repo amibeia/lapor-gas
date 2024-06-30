@@ -1,8 +1,8 @@
 'use server'
 
-import { HTTPResponse, Page } from 'puppeteer'
+import { HTTPResponse } from 'puppeteer'
 
-import { setupAuth } from '@/actions/user'
+import { checkCookieExpiration, setupAuth } from '@/actions/user'
 import { customerDTO } from '@/lib/dto'
 import {
 	MY_PERTAMINA_ERROR_RESPONSE,
@@ -12,7 +12,7 @@ import {
 } from '@/lib/my-pertamina'
 import { createBrowser, setupPage } from '@/lib/puppeteer'
 import { Customer, ErrorResponse, UserAuth } from '@/lib/types'
-import { getMyPertaminaErrorResponse } from '@/lib/utils'
+import { getMyPertaminaErrorResponse, isErrorResponse } from '@/lib/utils'
 
 function getVerifyNationalityIdErrorResponse(
 	response: HTTPResponse,
@@ -38,15 +38,6 @@ function getVerifyNationalityIdErrorResponse(
 		: getMyPertaminaErrorResponse('INTERNAL_SERVER_ERROR')
 }
 
-export async function checkCookieExpiration(
-	page: Page,
-	url: string,
-): Promise<null | ErrorResponse> {
-	const isRedirected = page.url() !== url
-
-	return isRedirected ? getMyPertaminaErrorResponse('INVALID_COOKIES') : null
-}
-
 export async function verifyCustomer(
 	auth: UserAuth,
 	nationalityId: Customer['nationalityId'],
@@ -55,13 +46,13 @@ export async function verifyCustomer(
 	const page = await setupPage(browser)
 
 	await setupAuth(page, auth)
-	await page.goto(VERIFY_NATIONALITY_ID_URL)
+	await page.goto(VERIFY_NATIONALITY_ID_URL, { waitUntil: 'networkidle0' })
 
 	const cookieError = await checkCookieExpiration(
 		page,
 		VERIFY_NATIONALITY_ID_URL,
 	)
-	if (cookieError) {
+	if (isErrorResponse(cookieError)) {
 		await browser.close()
 
 		return cookieError

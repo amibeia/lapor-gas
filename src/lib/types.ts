@@ -40,6 +40,51 @@ export type Customer = {
 	}
 }
 
+type ProfileOwner = {
+	nationalityId: string
+	name: string
+	email: string
+	type: string
+	phoneNumber: string
+}
+
+type ProfileLocation = {
+	address: string
+	village: string
+	district: string
+	city: string
+	province: string
+	zipCode: string
+	coordinate: string
+}
+
+type ProfileStore = {
+	name: string
+	phoneNumber: string
+	address: string
+}
+
+type ProfileAgent = {
+	id: string
+	name: string
+}
+
+type ProfileSettings = {
+	isSubsidyProduct: boolean
+	isActiveMyptm: boolean
+	isAvailableTransaction: boolean
+}
+
+export type Profile = {
+	id: string
+	registrationId: string
+	owner: ProfileOwner
+	location: ProfileLocation
+	store: ProfileStore
+	agent: ProfileAgent
+	settings: ProfileSettings
+}
+
 export type ErrorResponse = {
 	code: number
 	message: string

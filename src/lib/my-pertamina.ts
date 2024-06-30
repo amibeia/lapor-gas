@@ -4,6 +4,8 @@ export const LOGIN_URL =
 	'https://subsiditepatlpg.mypertamina.id/merchant/auth/login'
 export const VERIFY_NATIONALITY_ID_URL =
 	'https://subsiditepatlpg.mypertamina.id/merchant/app/verification-nik'
+export const PROFILE_URL =
+	'https://subsiditepatlpg.mypertamina.id/merchant/app/profile-merchant'
 
 export const LOGIN_ENDPOINT =
 	'https://api-map.my-pertamina.id/general/v1/users/login'
@@ -100,5 +102,46 @@ type VerifyNationalityIdData = {
 	isSubsidi: boolean
 }
 
+type Agen = {
+	id: string
+	name: string
+}
+
+type Bank = {
+	bankName: any
+	accountName: any
+	accountNumber: any
+}
+
+type ProfileData = {
+	registrationId: string
+	name: string
+	address: string
+	city: string
+	province: string
+	coordinate: string
+	storeName: string
+	storeAddress: string
+	phoneNumber: string
+	tid: string
+	mid: any
+	spbu: string
+	merchantType: string
+	midMap: string
+	isSubsidiProduct: boolean
+	storePhoneNumber: string
+	email: string
+	nationalityId: string
+	ditrictName: string
+	villageName: string
+	zipcode: string
+	agen: Agen
+	isActiveMyptm: boolean
+	bank: Bank
+	myptmActivationStatus: any
+	isAvailableTransaction: boolean
+}
+
 export type LoginResponse = Response<LoginData>
 export type VerifyNationalityIdResponse = Response<VerifyNationalityIdData>
+export type ProfileResponse = Response<ProfileData>

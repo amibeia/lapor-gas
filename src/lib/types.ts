@@ -75,7 +75,7 @@ type ProfileSettings = {
 	isAvailableTransaction: boolean
 }
 
-export type Profile = {
+export type UserProfile = {
 	id: string
 	registrationId: string
 	owner: ProfileOwner
@@ -83,6 +83,26 @@ export type Profile = {
 	store: ProfileStore
 	agent: ProfileAgent
 	settings: ProfileSettings
+}
+
+export type Product = {
+	id: string
+	registrationId: string
+	name: string
+	stock: {
+		available: number
+		redeem: number
+		sold: number
+	}
+	store: {
+		name: string
+	}
+	price: {
+		purchase: number
+		selling: number
+		min: number
+		max: number
+	}
 }
 
 export type ErrorResponse = {

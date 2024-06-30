@@ -3,10 +3,17 @@ import { Cookie } from 'puppeteer'
 import { CUSTOMER_PREFIX_ID, PROFILE_PREFIX_ID } from '@/lib/constants'
 import {
 	LoginResponse,
+	ProductResponse,
 	ProfileResponse,
 	VerifyNationalityIdResponse,
 } from '@/lib/my-pertamina'
-import { Customer, CustomerType, Profile, UserAuth } from '@/lib/types'
+import {
+	Customer,
+	CustomerType,
+	Product,
+	UserAuth,
+	UserProfile,
+} from '@/lib/types'
 import { kebabCase, nanoId } from '@/lib/utils'
 
 export function userAuthDTO(
@@ -49,7 +56,7 @@ export function customerDTO({ data }: VerifyNationalityIdResponse): Customer {
 	}
 }
 
-export function profileDTO({ data }: ProfileResponse): Profile {
+export function profileDTO({ data }: ProfileResponse): UserProfile {
 	return {
 		id: nanoId({ prefix: PROFILE_PREFIX_ID }),
 		registrationId: data.registrationId,
@@ -82,6 +89,28 @@ export function profileDTO({ data }: ProfileResponse): Profile {
 			isSubsidyProduct: data.isSubsidiProduct,
 			isActiveMyptm: data.isActiveMyptm,
 			isAvailableTransaction: data.isAvailableTransaction,
+		},
+	}
+}
+
+export function productDTO({ data }: ProductResponse): Product {
+	return {
+		id: data.productId,
+		registrationId: data.registrationId,
+		name: data.productName,
+		stock: {
+			available: data.stockAvailable,
+			redeem: data.stockRedeem,
+			sold: data.sold,
+		},
+		price: {
+			purchase: data.modal,
+			selling: data.price,
+			min: data.productMinPrice,
+			max: data.productMaxPrice,
+		},
+		store: {
+			name: data.storeName,
 		},
 	}
 }

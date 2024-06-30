@@ -14,7 +14,12 @@ import {
 	VERIFY_NATIONALITY_ID_URL,
 } from '@/lib/my-pertamina'
 import { createBrowser, setupPage } from '@/lib/puppeteer'
-import { ErrorResponse, Profile, UserAuth, UserCredential } from '@/lib/types'
+import {
+	ErrorResponse,
+	UserAuth,
+	UserCredential,
+	UserProfile,
+} from '@/lib/types'
 import { getMyPertaminaErrorResponse, isErrorResponse } from '@/lib/utils'
 
 export async function setupAuth(page: Page, auth: UserAuth) {
@@ -101,7 +106,7 @@ export async function logout(auth: UserAuth): Promise<null | ErrorResponse> {
 
 export async function getProfile(
 	auth: UserAuth,
-): Promise<Profile | ErrorResponse> {
+): Promise<UserProfile | ErrorResponse> {
 	const browser = await createBrowser()
 	const page = await setupPage(browser)
 

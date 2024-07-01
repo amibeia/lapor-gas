@@ -105,6 +105,12 @@ export type Product = {
 	}
 }
 
+export type Order = {
+	id: string
+	nationalityId: string
+	quantity: number
+}
+
 export type ErrorResponse = {
 	code: number
 	message: string

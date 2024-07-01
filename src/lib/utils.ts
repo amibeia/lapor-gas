@@ -44,6 +44,13 @@ export function kebabCase(words: string) {
 		.join('-')
 }
 
+export function titleCase(words: string) {
+	return words
+		.split('-')
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ')
+}
+
 export function nanoId(
 	{ size = 10, prefix }: NanoIdArgs = { size: 10 },
 ): string {
